@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "playergr",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,8 +10,15 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@ant-design-vue/nuxt": "^1.4.1",
+    "@unocss/nuxt": "^0.60.3",
+    "@unocss/reset": "^0.60.3",
+    "@vueuse/components": "^10.10.0",
+    "@vueuse/core": "^10.10.0",
+    "lucide-vue-next": "^0.381.0",
     "nuxt": "^3.11.2",
     "vue": "^3.4.27",
-    "vue-router": "^4.3.2"
+    "vue-router": "^4.3.2",
+    "ytdl-core": "^4.11.5"
   }
 }
