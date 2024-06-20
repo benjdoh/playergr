@@ -16,5 +16,5 @@ export default defineEventHandler(async (event) => {
   return ytdl(id, {
     quality: 'highestaudio',
     filter: 'audioonly',
-  })
+  }).setEncoding('base64')
 })

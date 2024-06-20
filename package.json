@@ -17,6 +17,7 @@
     "@vueuse/core": "^10.10.0",
     "lucide-vue-next": "^0.381.0",
     "nuxt": "^3.11.2",
+    "valibot": "^0.33.3",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2",
     "ytdl-core": "^4.11.5"
