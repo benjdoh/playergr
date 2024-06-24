@@ -1,5 +1,5 @@
 import { BASEURL, API_KEY, CLIENT_VERSION, PARAMS_ID } from './constants'
-import type { MusicSearchResult, Song } from 'assets/types/youtube'
+import type { MusicSearchResult, Song } from 'assets/types'
 
 export type SerachYoutubeMusicOptions = {
   query: string
@@ -57,7 +57,7 @@ function extractData(data: any): MusicSearchResult {
 
   for (const content of shelf_renderer.contents) {
     const flexColumns = content.musicResponsiveListItemRenderer.flexColumns
-    const name = flexColumns[0].musicResponsiveListItemFlexColumnRenderer.text.runs[0].text
+    const title = flexColumns[0].musicResponsiveListItemFlexColumnRenderer.text.runs[0].text
     const id = flexColumns[0].musicResponsiveListItemFlexColumnRenderer.text.runs[0].navigationEndpoint.watchEndpoint.videoId
     const artists: Array<{ id: string; name: string }> = []
     const album = { id: '', name: '' }
@@ -84,7 +84,7 @@ function extractData(data: any): MusicSearchResult {
     }
 
     songs.push({
-      name,
+      title,
       id,
       thumbnails,
       album,

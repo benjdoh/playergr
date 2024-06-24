@@ -3,9 +3,10 @@ import { useInfiniteScroll } from '@vueuse/core'
 import { vInfiniteScroll } from '@vueuse/components'
 import { ChevronLeft } from 'lucide-vue-next'
 import { watchDebounced } from '@vueuse/core'
-import type { MusicSearchResult, Song } from 'assets/types/youtube'
+import type { MusicSearchResult, Song, Player } from 'assets/types'
 
-const audioId = useAudioID()
+const audioSources = inject<Record<string, string>>('useAudioSources')
+const player = inject<Player>('usePlayer')
 const containerElem = ref<HTMLDivElement>()
 const songs = ref<Song[]>([])
 const query = ref('')
@@ -68,17 +69,23 @@ watchDebounced(query, () => fetchSongs(false), { debounce: 250 })
         v-for="song of songs"
         :key="song.id"
         class="flex h-14 min-h-14 gap-4"
-        @click="audioId = song.id"
+        @click="
+          () => {
+            if (!player) return
+
+            player.current = song
+          }
+        "
       >
         <img
           class="h-full rounded-sm"
           :src="song.thumbnails[1]?.url || song.thumbnails[1] as unknown as string"
-          :alt="song.name + ' Artwork'"
+          :alt="song.title + ' Artwork'"
         />
 
         <div class="overflow-hidden text-xs h-full flex flex-col justify-evenly">
           <p class="">
-            {{ song.name }}
+            {{ song.title }}
           </p>
 
           <p class="text-white/60">

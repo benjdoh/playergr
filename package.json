@@ -1,7 +1,20 @@
 {
   "name": "playergr",
+  "dependencies": {
+    "@ant-design-vue/nuxt": "^1.4.2",
+    "@unocss/nuxt": "^0.60.4",
+    "@unocss/reset": "^0.60.4",
+    "@vueuse/components": "^10.11.0",
+    "@vueuse/core": "^10.11.0",
+    "lucide-vue-next": "^0.381.0",
+    "nuxt": "^3.12.2",
+    "pinia": "^2.1.7",
+    "valibot": "^0.33.3",
+    "vue": "^3.4.30",
+    "vue-router": "^4.4.0",
+    "ytdl-core": "^4.11.5"
+  },
   "private": true,
-  "type": "module",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -9,17 +22,5 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
-  "dependencies": {
-    "@ant-design-vue/nuxt": "^1.4.1",
-    "@unocss/nuxt": "^0.60.3",
-    "@unocss/reset": "^0.60.3",
-    "@vueuse/components": "^10.10.0",
-    "@vueuse/core": "^10.10.0",
-    "lucide-vue-next": "^0.381.0",
-    "nuxt": "^3.11.2",
-    "valibot": "^0.33.3",
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.2",
-    "ytdl-core": "^4.11.5"
-  }
+  "type": "module"
 }
