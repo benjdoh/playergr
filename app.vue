@@ -16,6 +16,7 @@ useHead({
       href: '/apple-touch-icon.png',
     },
   ],
+  title: 'Player GR',
 })
 </script>
 
