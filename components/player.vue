@@ -1,23 +1,79 @@
 <script setup lang="ts">
 import { watchDebounced } from '@vueuse/core'
 import type { Player } from '~/assets/types'
-import { s } from '~/assets/song'
+import { createStorage } from 'unstorage'
+import idb from 'unstorage/drivers/indexedb'
 
-const audioSources = inject<Record<string, string>>('useAudioSources')
-const player = inject<Player>('usePlayer')
+const player = useAudioPlayer()
 const audioEl = ref<HTMLAudioElement>()
+const audioCtx = ref<AudioContext>()
 
 watchDebounced(
-  () => player,
-  async (value, prev) => {
+  player,
+  async (value) => {
     if (!audioEl.value) return
     if (!value?.current) return // || (prev?.current && value.current.id === prev.current.id)
+    if (!audioCtx.value) {
+      // @ts-expect-error
+      audioCtx.value = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' })
+    }
 
-    audioEl.value.src = `/api/stream?id=${value.current.id}`
-    audioEl.value.play()
+    navigator.mediaSession.playbackState = 'playing'
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: value.current.title,
+      artist: value.current.artists.join(', '),
+      album: value.current.album.name,
+      artwork: value.current.thumbnails.map((v) => ({ src: v.url })),
+    })
+
+    navigator.mediaSession.setActionHandler('play', () => {
+      /* Code excerpted. */
+    })
+    navigator.mediaSession.setActionHandler('pause', () => {
+      /* Code excerpted. */
+    })
+    navigator.mediaSession.setActionHandler('stop', () => {
+      /* Code excerpted. */
+    })
+    navigator.mediaSession.setActionHandler('seekbackward', () => {
+      /* Code excerpted. */
+    })
+    navigator.mediaSession.setActionHandler('seekforward', () => {
+      /* Code excerpted. */
+    })
+    navigator.mediaSession.setActionHandler('seekto', () => {
+      /* Code excerpted. */
+    })
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+      /* Code excerpted. */
+    })
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+      /* Code excerpted. */
+    })
+
+    const res = await fetch(`/api/stream?id=${value.current.id}`)
+    const buff = await res.arrayBuffer()
+
+    const storage = createStorage({
+      driver: idb({
+        dbName: 'playergr',
+        storeName: 'songs',
+      }),
+    })
+    if (!storage.getItem(value.current.id)) {
+      storage.setItem(value.current.id, JSON.stringify(new Uint8Array(buff)))
+    }
+
+    const source = audioCtx.value.createBufferSource()
+    source.buffer = await audioCtx.value.decodeAudioData(buff)
+    source.connect(audioCtx.value.destination)
+    source.start(audioCtx.value.currentTime)
   },
   { debounce: 500, deep: true }
 )
+
+onMounted(() => {})
 
 // watchDebounced(
 //   audioSource,
@@ -38,9 +94,7 @@ watchDebounced(
 </script>
 
 <template>
-  <audio ref="audioEl" />
-
-  <div :class="['absolute bottom-16 w-screen h-20 p-2 z-50 max-w-screen transform', player?.current ? '' : 'translate-y-200%']">
+  <div :class="['fixed bottom-16 w-screen h-16 z-50 max-w-screen transform', player?.current ? '' : 'translate-y-200%']">
     <div class="bg-black text-white overflow-hidden w-full h-full p-2 rounded-md flex gap-2">
       <img
         class="h-full"

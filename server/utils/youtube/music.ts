@@ -77,8 +77,8 @@ function extractData(data: any): MusicSearchResult {
           })
           break
         case 'MUSIC_PAGE_TYPE_ALBUM':
-          album.id = run.text
-          album.name = run.navigationEndpoint.browseEndpoint.browseId
+          album.id = run.navigationEndpoint.browseEndpoint.browseId
+          album.name = run.text
           break
       }
     }

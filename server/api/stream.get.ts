@@ -1,11 +1,9 @@
-import ytdl from 'ytdl-core'
-
-type Query = {
-  id: string
-}
+import { Innertube } from 'youtubei.js'
 
 export default defineEventHandler(async (event) => {
-  const { id } = getQuery<Query>(event)
+  const { id } = getQuery<{
+    id: string
+  }>(event)
 
   if (!id) {
     setResponseStatus(event, 400)
@@ -13,8 +11,9 @@ export default defineEventHandler(async (event) => {
     return 'no'
   }
 
-  return ytdl(id, {
-    quality: 'highestaudio',
-    filter: 'audioonly',
-  })
+  setHeader(event, 'Cache-Control', 'public, max-age: 1296000')
+
+  const yi = await Innertube.create()
+
+  return yi.download(id, {})
 })

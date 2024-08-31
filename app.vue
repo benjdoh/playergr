@@ -1,26 +1,31 @@
 <script setup lang="ts">
-import type { Player } from './assets/types'
-
-provide('useAudioSources', reactive<Record<string, string>>({}))
-provide(
-  'usePlayer',
-  reactive<Player>({
-    current: null,
-    playing: false,
-    volume: 1,
-    queue: [],
-  })
-)
+useHead({
+  meta: [
+    {
+      name: 'viewport',
+      content: 'initial-scale=1, viewport-fit=cover,user-scalable=no,maximum-scale=1',
+    },
+  ],
+  link: [
+    {
+      rel: 'icon',
+      href: '/favicon.ico',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: '/apple-touch-icon.png',
+    },
+  ],
+})
 </script>
 
 <template>
-  <div class="h-screen bg-black w-screen max-w-screen max-h-screen text-xs">
-    <div class="h-12 p-4 bg-black">
-      <span class="font-semibold">Player GR</span>
-    </div>
+  <div class="h-dvh w-dvw max-w-dvw max-h-dvh bg-black text-white text-sm pb-16 overflow-x-hidden overflow-y-auto pb-16 flex flex-col">
+    <keep-alive>
+      <NuxtPage />
+    </keep-alive>
 
-    <SearchContainer />
-
-    <Player />
+    <player />
+    <navigation />
   </div>
 </template>
