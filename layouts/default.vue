@@ -24,14 +24,14 @@ useHead({
 </script>
 
 <template>
-  <Body class="bg-black text-white text-sm" />
+  <Body class="bg-black text-white text-sm font-inter overflow-x-hidden" />
 
   <keep-alive> <slot /> </keep-alive>
 
   <div :class="[player.current ? 'h-32' : 'h-16']" />
   <div
     :class="[
-      'bg-black/50 backdrop-blur-xl w-100% fixed bottom-0',
+      'bg-black/50 backdrop-blur-2xl w-100% fixed bottom-0',
       player.current ? 'h-34' : 'h-16',
     ]"
   />

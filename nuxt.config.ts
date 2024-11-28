@@ -1,6 +1,30 @@
+import {
+  transformerCompileClass,
+  transformerDirectives,
+  transformerVariantGroup,
+} from "unocss";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@unocss/nuxt', '@ant-design-vue/nuxt', '@pinia/nuxt'],
-  css: ['@unocss/reset/tailwind.css'],
-  compatibilityDate: '2024-08-26',
-})
+  modules: [
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@unocss/nuxt",
+    "@pinia/nuxt",
+    "vue3-carousel-nuxt",
+  ],
+  css: ["@unocss/reset/tailwind.css"],
+  compatibilityDate: "2024-08-26",
+  unocss: {
+    theme: {
+      fontFamily: {
+        inter: ["Inter"],
+      },
+    },
+    transformers: [
+      transformerCompileClass(),
+      transformerDirectives(),
+      transformerVariantGroup(),
+    ],
+  },
+});

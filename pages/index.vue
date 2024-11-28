@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import uniqolor from "uniqolor";
 const list = [...Array(30)].map(() =>
-  uniqolor.random({ format: "hex", lightness: [25, 100] })
+  uniqolor.random({ format: "hex", lightness: [25, 69] })
 );
 </script>
 

@@ -69,6 +69,9 @@ export const usePlayer = defineStore("usePlayer", () => {
     timestamp,
     next,
     previous,
+    togglePlaying() {
+      isPlaying.value = !isPlaying.value;
+    },
   };
 });
 

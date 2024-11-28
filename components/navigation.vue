@@ -1,46 +1,44 @@
 <script setup lang="ts">
 import { useScreenSafeArea } from "@vueuse/core";
-import {
-  HomeIcon as HomeOutline,
-  MagnifyingGlassIcon as SearchOutline,
-  RectangleStackIcon as LibraryOutline,
-  Cog6ToothIcon as SettingsOutline,
-} from "@heroicons/vue/24/outline";
-import {
-  HomeIcon as HomeSolid,
-  MagnifyingGlassIcon as SearchSolid,
-  RectangleStackIcon as LibrarySolid,
-  Cog6ToothIcon as Settingssolid,
-} from "@heroicons/vue/24/solid";
 
+const clickedLinks = shallowRef<string[]>([]);
 const route = useRoute();
 const { bottom } = useScreenSafeArea();
 const links = [
   {
     to: "/",
     text: "Home",
-    outline: HomeOutline,
-    solid: HomeSolid,
+    outline: "ph:house",
+    solid: "ph:house-fill",
   },
   {
     to: "/search",
     text: "Search",
-    outline: SearchOutline,
-    solid: SearchSolid,
+    outline: "ph:magnifying-glass",
+    solid: "ph:magnifying-glass-fill",
   },
   {
     to: "/library",
     text: "Library",
-    outline: LibraryOutline,
-    solid: LibrarySolid,
+    outline: "ph:stack",
+    solid: "ph:stack-fill",
   },
   {
     to: "/settings",
     text: "Settings",
-    outline: SettingsOutline,
-    solid: Settingssolid,
+    outline: "ph:gear",
+    solid: "ph:gear-fill",
   },
 ];
+
+function linkClicked(to: string) {
+  clickedLinks.value.push(to);
+
+  setTimeout(
+    () => (clickedLinks.value = clickedLinks.value.filter((x) => x !== to)),
+    200
+  );
+}
 </script>
 
 <template>
@@ -55,12 +53,16 @@ const links = [
         v-for="link of links"
         :to="link.to"
         class="h-16 grid place-items-center"
+        @click="linkClicked(link.to)"
       >
         <div
-          class="transform transition duration-200 active:(scale-90) flex flex-col items-center gap-1"
+          :class="[
+            'transform transition duration-200 flex flex-col items-center gap-0.5',
+            clickedLinks.includes(link.to) ? 'scale-90' : '',
+          ]"
         >
-          <component
-            :is="route.path === link.to ? link.solid : link.outline"
+          <Icon
+            :name="route.path === link.to ? link.solid : link.outline"
             class="size-6"
           />
 

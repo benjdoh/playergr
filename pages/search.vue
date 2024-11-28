@@ -11,11 +11,11 @@ const searchFilter: SearchFilter[] = [
   "songs",
   "videos",
   "albums",
-  "playlists",
   "artists",
+  "playlists",
+  "profiles",
   "podcasts",
   "episodes",
-  "profiles",
 ];
 const search = useSearch();
 const thumnailIndexes = shallowRef<Record<string, number>>({});
@@ -46,59 +46,57 @@ function joinArtists(artists: string[]) {
 </script>
 
 <template>
-  <div class="space-y-4">
-    <!-- search containter -->
-    <div class="top-0 px-4 pt-4 flex items-center gap-4 bg-black">
-      <div class="bg-dark-700 w-full relative rounded-md">
-        <input
-          v-model="search.query"
-          :class="[
-            'bg-transparent outline-none text-white px-3 py-1 h-10 flex items-center w-full',
-            !search.query ? '' : 'pr-8',
-          ]"
-          type="text"
-          placeholder="Search songs, playlist, artists..."
-          @focus="search.searching = true"
-          @blur="search.searching = false"
-        />
-        <button
-          v-if="!!search.query"
-          class="absolute w-8 h-8 top-1 right-1 grid place-items-center"
-          @click="
-            () => {
-              search.songs = [];
-              search.query = '';
-            }
-          "
-        >
-          <XMarkIcon class="size-6" />
-        </button>
-      </div>
-    </div>
-    <div
-      v-if="search.songs.length > 0"
-      class="w-full overflow-x-auto flex gap-2 px-4"
-    >
+  <!-- search containter -->
+  <div class="sticky top-0 p-4 flex items-center gap-4 bg-black">
+    <div class="bg-dark-700 w-full relative rounded-md">
+      <input
+        v-model="search.query"
+        :class="[
+          'bg-transparent outline-none text-white px-3 py-1 h-10 flex items-center w-full',
+          !search.query ? '' : 'pr-8',
+        ]"
+        type="text"
+        placeholder="Search songs, playlist, artists..."
+        @focus="search.searching = true"
+        @blur="search.searching = false"
+      />
       <button
-        v-if="search.filter !== null"
-        class="h-8 px-0.5 bg-white text-black rounded"
+        v-if="!!search.query"
+        class="absolute w-8 h-8 top-1 right-1 grid place-items-center"
+        @click="
+          () => {
+            search.songs = [];
+            search.query = '';
+          }
+        "
       >
         <XMarkIcon class="size-6" />
       </button>
-      <button
-        v-for="f of searchFilter"
-        :key="f"
-        :class="[
-          'px-2 h-8 rounded',
-          search.filter === f
-            ? 'bg-white text-black'
-            : 'bg-dark-500 border border-dark-200',
-        ]"
-        @click="search.filter = f"
-      >
-        {{ f }}
-      </button>
     </div>
+  </div>
+
+  <div class="space-y-4">
+    <div class="px-4">
+      <div
+        v-if="search.songs.length > -10"
+        class="w-full flex gap-2 overflow-x-auto"
+      >
+        <button
+          v-for="f of searchFilter"
+          :key="f"
+          :class="[
+            'px-3 h-8 rounded-full transition-all capitalize',
+            search.filter === f
+              ? 'bg-white text-black'
+              : 'bg-dark-500 border border-dark-200',
+          ]"
+          @click="search.filter = f"
+        >
+          {{ f }}
+        </button>
+      </div>
+    </div>
+
     <!-- list of songs -->
     <div
       class="flex-grow overflow-y-auto overflow-x-hidden px-4 pb-4 gap-4 flex flex-col"
