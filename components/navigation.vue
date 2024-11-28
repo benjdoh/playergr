@@ -42,33 +42,31 @@ function linkClicked(to: string) {
 </script>
 
 <template>
-  <div class="fixed bottom-0 w-100%">
-    <div
-      class="grid grid-cols-4"
-      :style="{
-        paddingBottom: bottom,
-      }"
+  <div
+    class="grid grid-cols-4 w-full"
+    :style="{
+      paddingBottom: bottom,
+    }"
+  >
+    <nuxt-link
+      v-for="link of links"
+      :to="link.to"
+      class="h-16 grid place-items-center"
+      @click="linkClicked(link.to)"
     >
-      <nuxt-link
-        v-for="link of links"
-        :to="link.to"
-        class="h-16 grid place-items-center"
-        @click="linkClicked(link.to)"
+      <div
+        :class="[
+          'transform transition duration-200 flex flex-col items-center gap-0.5 ',
+          clickedLinks.includes(link.to) ? 'scale-90' : '',
+        ]"
       >
-        <div
-          :class="[
-            'transform transition duration-200 flex flex-col items-center gap-0.5',
-            clickedLinks.includes(link.to) ? 'scale-90' : '',
-          ]"
-        >
-          <Icon
-            :name="route.path === link.to ? link.solid : link.outline"
-            class="size-6"
-          />
+        <Icon
+          :name="route.path === link.to ? link.solid : link.outline"
+          class="size-6"
+        />
 
-          <span class="text-xs">{{ link.text }}</span>
-        </div>
-      </nuxt-link>
-    </div>
+        <span class="text-xs">{{ link.text }}</span>
+      </div>
+    </nuxt-link>
   </div>
 </template>

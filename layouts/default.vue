@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { useScreenSafeArea } from "@vueuse/core";
+
 const player = usePlayer();
+const { bottom } = useScreenSafeArea();
 
 useHead({
   meta: [
     {
       name: "viewport",
       content:
-        "initial-scale=1, viewport-fit=cover,user-scalable=no,maximum-scale=1",
+        "initial-scale=1.0,width=device-width, viewport-fit=cover,user-scalable=no,maximum-scale=1,minimum-scale=1",
     },
   ],
   link: [
@@ -31,11 +34,14 @@ useHead({
   <div :class="[player.current ? 'h-32' : 'h-16']" />
   <div
     :class="[
-      'bg-black/50 backdrop-blur-2xl w-100% fixed bottom-0',
-      player.current ? 'h-34' : 'h-16',
+      'bg-black/50 backdrop-blur-2xl w-full fixed bottom-0 grid grid-cols-1 p-2 z-20',
     ]"
-  />
-
-  <current-player />
-  <navigation />
+    :style="{
+      height: `calc(${bottom || '0px'} + ${player.current ? 8.5 : 4}rem)`,
+      paddingBottom: bottom || '-webkit-fill-available',
+    }"
+  >
+    <current-player v-if="player.current" />
+    <navigation />
+  </div>
 </template>

@@ -19,56 +19,50 @@ player.$subscribe(
 
 <template>
   <div
-    :class="[
-      'fixed bottom-16 w-full h-16 z-20 px-2',
-      player?.current ? '' : 'hidden',
-    ]"
+    class="h-16 w-full flex relative rounded-md gap-4 p-2 pr-4"
+    :style="{
+      background: `rgba(${imageColor?.red}, ${imageColor?.green}, ${imageColor?.blue}, 0.420)`,
+    }"
   >
-    <div
-      class="h-full w-full flex relative rounded-md gap-4 p-2 pr-4"
-      :style="{
-        background: `rgba(${imageColor?.red}, ${imageColor?.green}, ${imageColor?.blue}, 0.420)`,
-      }"
-    >
-      <div class="flex-grow overflow-hidden">
-        <carousel
-          :items-to-show="1"
-          class="h-full flex-grow max-w-max"
-          snapAlign="start"
-        >
-          <slide v-for="slide in 5" :key="slide" class="h-full">
-            <div
-              class="h-12 w-full flex justify-start gap-2 text-left text-nowrap"
-            >
-              <img
-                class="h-12 rounded"
-                :src="player?.current?.thumbnails[1].url"
-                :alt="`${player?.current?.album.name} artwork`"
-              />
+    <div class="flex-grow overflow-hidden">
+      <carousel
+        :items-to-show="1"
+        class="h-full flex-grow max-w-max"
+        snapAlign="start"
+      >
+        <slide v-for="slide in 5" :key="slide" class="h-full">
+          <div
+            class="h-12 w-full flex justify-start gap-2 text-left text-nowrap"
+          >
+            <img
+              class="h-12 rounded"
+              :src="player?.current?.thumbnails[1].url"
+              :alt="`${player?.current?.album.name} artwork`"
+            />
 
-              <div>
-                <div>{{ player?.current?.title }}</div>
-                <div class="text-white/50">
-                  <template
-                    v-for="(artist, index) in player?.current?.artists || []"
-                    :key="artist.id"
+            <div>
+              <div>{{ player?.current?.title }}</div>
+              <div class="text-white/50">
+                <template
+                  v-for="(artist, index) in player?.current?.artists || []"
+                  :key="artist.id"
+                >
+                  <span>{{ artist.name }}</span>
+                  <span
+                    v-if="index < (player?.current?.artists.length ?? 1) - 1"
+                    class="pr-1"
                   >
-                    <span>{{ artist.name }}</span>
-                    <span
-                      v-if="index < (player?.current?.artists.length ?? 1) - 1"
-                      class="pr-1"
-                    >
-                      ,
-                    </span>
-                  </template>
-                </div>
+                    ,
+                  </span>
+                </template>
               </div>
             </div>
-          </slide>
-        </carousel>
-      </div>
+          </div>
+        </slide>
+      </carousel>
+    </div>
 
-      <!-- <div
+    <!-- <div
         class="overflow-x-auto whitespace-nowrap snap-x snap-mandatory h-full flex-grow"
       >
         <div
@@ -78,29 +72,28 @@ player.$subscribe(
         ></div>
       </div> -->
 
-      <button>
-        <Icon
-          :name="player.timestamp > -1 ? 'ph:heart' : 'ph:heart-fill'"
-          class="size-6"
-        />
-      </button>
+    <button>
+      <Icon
+        :name="player.timestamp > -1 ? 'ph:heart' : 'ph:heart-fill'"
+        class="size-6"
+      />
+    </button>
 
-      <button @click="player.togglePlaying">
-        <Icon
-          :name="player.isPlaying ? 'ph:pause-fill' : 'ph:play-fill'"
-          class="size-6"
-        />
-      </button>
+    <button @click="player.togglePlaying">
+      <Icon
+        :name="player.isPlaying ? 'ph:pause-fill' : 'ph:play-fill'"
+        class="size-6"
+      />
+    </button>
 
-      <div
-        :class="[
-          'w-full absolute left-0 px-2 -bottom-3px transform -translate-y-1/2',
-        ]"
-      >
-        <span class="h-3px w-full bg-light-900/50 block rounded">
-          <div class="h-full rounded w-1/2 bg-white"></div>
-        </span>
-      </div>
+    <div
+      :class="[
+        'w-full absolute left-0 px-2 -bottom-3px transform -translate-y-1/2',
+      ]"
+    >
+      <span class="h-3px w-full bg-light-900/50 block rounded">
+        <div class="h-full rounded w-1/2 bg-white"></div>
+      </span>
     </div>
   </div>
 </template>
