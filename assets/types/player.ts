@@ -1,4 +1,4 @@
-import { string, object, array, type InferInput, number } from 'valibot'
+import { string, object, array, type InferInput, number } from "valibot";
 
 export const SongSchema = object({
   id: string(),
@@ -20,13 +20,23 @@ export const SongSchema = object({
     id: string(),
     name: string(),
   }),
-})
+});
 
-export type Song = InferInput<typeof SongSchema>
+export type Song = InferInput<typeof SongSchema>;
 
 export type Player = {
-  current: Song | null
-  playing: boolean
-  volume: number
-  queue: Song[]
-}
+  current: Song | null;
+  playing: boolean;
+  volume: number;
+  queue: Song[];
+};
+
+export type SearchFilter =
+  | "songs"
+  | "videos"
+  | "albums"
+  | "playlists"
+  | "artists"
+  | "podcasts"
+  | "episodes"
+  | "profiles";

@@ -1,10 +1,10 @@
-import { createStorage } from 'unstorage'
-import indexDB from 'unstorage/drivers/indexedb'
+import { createStorage, type StorageValue } from "unstorage";
+import indexDB from "unstorage/drivers/indexedb";
 
-export const useIndexedDB = () =>
-  createStorage({
+export const useIndexedDB = <T extends StorageValue>(store = "main") =>
+  createStorage<T>({
     driver: indexDB({
-      dbName: 'playergr',
-      storeName: 'main',
+      dbName: "playergr",
+      storeName: store,
     }),
-  })
+  });
