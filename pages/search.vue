@@ -17,6 +17,7 @@ const searchFilter: SearchFilter[] = [
   "podcasts",
   "episodes",
 ];
+const audio_player = useAudioPlayer();
 const search = useSearch();
 const thumnailIndexes = shallowRef<Record<string, number>>({});
 const thumbnailIndex = computed(() => {
@@ -104,7 +105,7 @@ function joinArtists(artists: string[]) {
       <div v-for="song of search.songs" :key="song.id" class="flex h-14 gap-2">
         <button
           class="flex h-full gap-4 flex-grow"
-          @click="usePlayer().current = song"
+          @click="audio_player.current = song"
         >
           <img
             class="h-full rounded-sm"

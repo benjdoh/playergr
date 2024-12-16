@@ -32,7 +32,9 @@ export const useSearch = defineStore("useSearch", () => {
     continuation.value = data.continuation;
   }
 
-  watchDebounced(query, () => fetchSongs(false), { debounce: 250 });
+  watchDebounced(query, () => fetchSongs(false), {
+    debounce: 250,
+  });
 
   return {
     searching,

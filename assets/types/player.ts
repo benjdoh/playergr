@@ -1,4 +1,12 @@
-import { string, object, array, type InferInput, number } from "valibot";
+import {
+  string,
+  object,
+  array,
+  type InferInput,
+  number,
+  union,
+  custom,
+} from "valibot";
 
 export const SongSchema = object({
   id: string(),
@@ -19,6 +27,10 @@ export const SongSchema = object({
   album: object({
     id: string(),
     name: string(),
+  }),
+  duration: number(),
+  audio: custom<HTMLAudioElement>((v) => {
+    return typeof v === "object" && !!v && "src" in v;
   }),
 });
 

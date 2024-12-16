@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useScreenSafeArea } from "@vueuse/core";
-
+const audioPlayer = useAudioPlayer();
 const clickedLinks = shallowRef<string[]>([]);
 const route = useRoute();
-const { bottom } = useScreenSafeArea();
 const links = [
   {
     to: "/",
@@ -42,12 +40,7 @@ function linkClicked(to: string) {
 </script>
 
 <template>
-  <div
-    class="grid grid-cols-4 w-full"
-    :style="{
-      paddingBottom: bottom,
-    }"
-  >
+  <div :class="['grid grid-cols-4 w-full', audioPlayer.current ? 'pt-2' : '']">
     <nuxt-link
       v-for="link of links"
       :to="link.to"
@@ -56,7 +49,7 @@ function linkClicked(to: string) {
     >
       <div
         :class="[
-          'transform transition duration-200 flex flex-col items-center gap-0.5 ',
+          'transform transition duration-200 flex flex-col items-center gap-1',
           clickedLinks.includes(link.to) ? 'scale-90' : '',
         ]"
       >

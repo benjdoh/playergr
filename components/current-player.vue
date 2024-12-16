@@ -2,10 +2,10 @@
 import { extractColorsFromSrc } from "extract-colors";
 import { useSwipe } from "@vueuse/core";
 
-const player = usePlayer();
+const audio_player = useAudioPlayer();
 const imageColor = shallowRef<FinalColor>();
 
-player.$subscribe(
+audio_player.$subscribe(
   async (e, { current }) => {
     if (!current) return (imageColor.value = undefined);
 
@@ -19,7 +19,7 @@ player.$subscribe(
 
 <template>
   <div
-    class="h-16 w-full flex relative rounded-md gap-4 p-2 pr-4"
+    class="h-16 flex relative rounded-md gap-4 p-2 pr-4"
     :style="{
       background: `rgba(${imageColor?.red}, ${imageColor?.green}, ${imageColor?.blue}, 0.420)`,
     }"
@@ -36,20 +36,23 @@ player.$subscribe(
           >
             <img
               class="h-12 rounded"
-              :src="player?.current?.thumbnails[1].url"
-              :alt="`${player?.current?.album.name} artwork`"
+              :src="audio_player?.current?.thumbnails[1].url"
+              :alt="`${audio_player?.current?.album.name} artwork`"
             />
 
             <div>
-              <div>{{ player?.current?.title }}</div>
+              <div>{{ audio_player?.current?.title }}</div>
               <div class="text-white/50">
                 <template
-                  v-for="(artist, index) in player?.current?.artists || []"
+                  v-for="(artist, index) in audio_player?.current?.artists ||
+                  []"
                   :key="artist.id"
                 >
                   <span>{{ artist.name }}</span>
                   <span
-                    v-if="index < (player?.current?.artists.length ?? 1) - 1"
+                    v-if="
+                      index < (audio_player?.current?.artists.length ?? 1) - 1
+                    "
                     class="pr-1"
                   >
                     ,
@@ -74,14 +77,14 @@ player.$subscribe(
 
     <button>
       <Icon
-        :name="player.timestamp > -1 ? 'ph:heart' : 'ph:heart-fill'"
+        :name="audio_player.timestamp > -1 ? 'ph:heart' : 'ph:heart-fill'"
         class="size-6"
       />
     </button>
 
-    <button @click="player.togglePlaying">
+    <button @click="audio_player.togglePlaying">
       <Icon
-        :name="player.isPlaying ? 'ph:pause-fill' : 'ph:play-fill'"
+        :name="audio_player.isPlaying ? 'ph:pause-fill' : 'ph:play-fill'"
         class="size-6"
       />
     </button>
