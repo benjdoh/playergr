@@ -5,7 +5,7 @@ import {
   EllipsisVerticalIcon,
 } from "@heroicons/vue/24/outline";
 import { vInfiniteScroll } from "@vueuse/components";
-import type { SearchFilter } from "~/assets/types";
+import type { SearchFilter, Song } from "~/assets/types";
 
 const searchFilter: SearchFilter[] = [
   "songs",
@@ -43,6 +43,14 @@ function joinArtists(artists: string[]) {
   artists[artists.length - 1] = ` ${artists.at(-1)}`;
 
   return artists.join(", ");
+}
+
+function selectSong(song: Song, index: number) {
+  audio_player.current = song;
+  audio_player.queue = search.songs.slice(index + 1);
+  audio_player.isPlaying = true;
+
+  console.log(audio_player.queue);
 }
 </script>
 
@@ -102,10 +110,14 @@ function joinArtists(artists: string[]) {
     <div
       class="flex-grow overflow-y-auto overflow-x-hidden px-4 pb-4 gap-4 flex flex-col"
     >
-      <div v-for="song of search.songs" :key="song.id" class="flex h-14 gap-2">
+      <div
+        v-for="(song, index) of search.songs"
+        :key="song.id"
+        class="flex h-14 gap-2"
+      >
         <button
           class="flex h-full gap-4 flex-grow"
-          @click="audio_player.current = song"
+          @click="selectSong(song, index)"
         >
           <img
             class="h-full rounded-sm"

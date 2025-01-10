@@ -25,12 +25,12 @@ audio_player.$subscribe(
     }"
   >
     <div class="flex-grow overflow-hidden">
-      <carousel
+      <div
         :items-to-show="1"
         class="h-full flex-grow max-w-max"
         snapAlign="start"
       >
-        <slide v-for="slide in 5" :key="slide" class="h-full">
+        <div v-for="slide in 5" :key="slide" class="h-full">
           <div
             class="h-12 w-full flex justify-start gap-2 text-left text-nowrap"
           >
@@ -61,8 +61,8 @@ audio_player.$subscribe(
               </div>
             </div>
           </div>
-        </slide>
-      </carousel>
+        </div>
+      </div>
     </div>
 
     <!-- <div
@@ -94,9 +94,45 @@ audio_player.$subscribe(
         'w-full absolute left-0 px-2 -bottom-3px transform -translate-y-1/2',
       ]"
     >
-      <span class="h-3px w-full bg-light-900/50 block rounded">
-        <div class="h-full rounded w-1/2 bg-white"></div>
+      <span
+        class="h-3px w-full bg-neutral-500 block rounded relative overflow-hidden"
+      >
+        <div
+          :class="[
+            'h-full rounded bg-white w-full absolute left-0 transform transition-all -translate-x-full duration-500',
+            audio_player.is_loading ? 'animate-widlse' : '',
+          ]"
+          :style="{
+            transform: `translateX(${
+              audio_player.current
+                ? (audio_player.timestamp /
+                    (audio_player.current?.audio.duration || 1)) *
+                    100 -
+                  100
+                : 0
+            }%)`,
+          }"
+        ></div>
       </span>
     </div>
   </div>
 </template>
+
+<style>
+.animate-widlse {
+  animation: widlse 4s infinite ease-in-out;
+  width: 33.33%;
+}
+
+@keyframes widlse {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(300%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+</style>

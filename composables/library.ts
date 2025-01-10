@@ -29,7 +29,6 @@ export const useLibrary = defineStore("useLibrary", () => {
 
     const res = await fetch(`/api/stream?id=${id}`, { cache: "force-cache" });
     const data = await res.clone().text();
-    console.log(btoa(data));
 
     dlStorage.setItem(id, data);
     downloaded.value.push(id);

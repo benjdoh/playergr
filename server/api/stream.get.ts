@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
   const { id } = getQuery<{ id: string }>(event);
 
   setHeader(event, "Cache-Control", "max-age: 1296000");
+  console.log(id);
 
-  return (await Innertube.create()).download(id, { type: "audio" });
+  return Innertube.create().then((v) => v.download(id, { type: "audio" }));
 });

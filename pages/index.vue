@@ -1,21 +1,30 @@
 <script setup lang="ts">
 import uniqolor from "uniqolor";
-const list = [...Array(30)].map(() =>
-  uniqolor.random({ format: "hex", lightness: [25, 69] })
-);
+
+async function play() {
+  const res = await $fetch("/api/test");
+
+  const audio = new Audio(res);
+
+  audio.play();
+}
 </script>
 
 <template>
   <div class="grid grid-cols-2 text-white gap-4 p-4">
     <client-only>
       <div
-        v-for="c of list"
-        :key="c.color"
+        v-for="c of 60"
+        :key="c"
         class="h-20 p-3 rounded"
-        :style="{ background: c.color }"
+        :style="{
+          background: uniqolor(c * 2, { lightness: [25, 69] }).color,
+        }"
       >
-        {{ c.color }}
+        {{ c }}
       </div>
     </client-only>
+
+    <button class="fixed top-10 bg-red p-10" @click="play">Play</button>
   </div>
 </template>

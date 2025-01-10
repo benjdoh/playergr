@@ -28,7 +28,12 @@ export const useSearch = defineStore("useSearch", () => {
 
     if (!data) return;
 
-    songs.value = append ? [...songs.value, ...data.songs] : data.songs;
+    const new_songs = data.songs.map((song) => ({
+      ...song,
+      audio: new Audio(),
+    }));
+
+    songs.value = append ? [...songs.value, ...new_songs] : new_songs;
     continuation.value = data.continuation;
   }
 

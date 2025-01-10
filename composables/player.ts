@@ -5,13 +5,14 @@ import type { StreamingData } from "~/assets/types";
 export const useAudioPlayer = defineStore("useAudioPlayer", () => {
   const mediaSession = window?.navigator?.mediaSession;
 
+  const skip_next = ref(false);
   const current = shallowRef<Song | null>(null);
   const upnext = shallowRef<Song[]>([]);
   const queue = shallowRef<Song[]>([]);
   const history = shallowRef<Song[]>([]);
-  const audio = window?.Audio ? new Audio() : null;
   const isPlaying = shallowRef(false);
   const timestamp = shallowRef(0);
+  const is_loading = ref(false);
 
   if (mediaSession) {
     mediaSession.setActionHandler("play", () => (isPlaying.value = true));
@@ -69,22 +70,61 @@ export const useAudioPlayer = defineStore("useAudioPlayer", () => {
   }
 
   watch(current, updateMediaSession);
-  watch(isPlaying, async (v) => {
-    if (!audio || !current.value) return;
+  watch(isPlaying, async (playing) => {
+    if (!current.value) return;
 
-    if (!v) return audio.pause();
+    const audio = current.value.audio;
 
-    // const metadata = await $fetch<StreamingData>("/api/streaming-data", {
-    //   method: "POST",
-    //   query: { id: current.value.id },
-    // });
+    if (!playing) return current.value.audio.pause();
 
-    audio.src = `/api/v/${current.value.id}/stream`;
-    audio.play();
+    audio.addEventListener("timeupdate", () => {
+      timestamp.value = audio.currentTime;
+
+      console.log(timestamp.value);
+    });
+
+    try {
+      is_loading.value = true;
+      audio.play();
+    } catch (error) {
+      isPlaying.value = false;
+    }
+
+    is_loading.value = false;
+  });
+
+  const audio_fixing_watcher = watch(
+    current,
+    (v) => {
+      if (!v) return;
+      let audio = v.audio;
+      const uri = `/api/stream?id=${v.id}`;
+
+      if (!audio) audio = new Audio(uri);
+      if (!audio.src) audio.src = uri;
+      if (isPlaying.value) audio.onload = () => audio.play();
+
+      current.value = {
+        ...v,
+        audio,
+      };
+    },
+    { onTrigger(event) {} }
+  );
+
+  watch(queue, (songs) => {
+    if (songs.length === 0) return;
+
+    for (const [index, song] of songs.entries()) {
+      if (song.audio && "src" in song.audio) continue;
+
+      songs[index] = { ...song, audio: new Audio() };
+    }
+
+    queue.value = songs;
   });
 
   return {
-    audio,
     current,
     isPlaying,
     timestamp,
@@ -94,6 +134,7 @@ export const useAudioPlayer = defineStore("useAudioPlayer", () => {
     next,
     previous,
     togglePlaying,
+    is_loading,
   };
 });
 
