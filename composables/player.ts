@@ -100,14 +100,15 @@ export const useAudioPlayer = defineStore("useAudioPlayer", () => {
       let audio = v.audio;
       const uri = `/api/stream?id=${v.id}`;
 
-      if (!audio) audio = new Audio(uri);
-      if (!audio.src) audio.src = uri;
-      if (isPlaying.value) audio.onload = () => audio.play();
+      if (audio && audio.src) return;
+      audio = new Audio(uri);
 
       current.value = {
         ...v,
         audio,
       };
+
+      audio.onload = () => audio.play();
     },
     { onTrigger(event) {} }
   );
