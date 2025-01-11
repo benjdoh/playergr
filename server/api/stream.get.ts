@@ -7,5 +7,9 @@ export default defineEventHandler(async (event) => {
   setHeader(event, "Cache-Control", "max-age: 1296000");
   console.log(id);
 
-  return Innertube.create().then((v) => v.download(id, { type: "audio" }));
+  try {
+    return Innertube.create().then((v) => v.download(id, { type: "audio" }));
+  } catch (e) {
+    return e;
+  }
 });
